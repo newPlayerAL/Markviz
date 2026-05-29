@@ -11,9 +11,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: app
 
     steps:
       - uses: actions/checkout@v4
@@ -39,10 +36,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Markviz-win-x64
-          path: app/publish/Markviz.exe
+          path: publish/Markviz.exe
 
       - name: Attach to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: app/publish/Markviz.exe
+          files: publish/Markviz.exe
