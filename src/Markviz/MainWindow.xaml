@@ -9,14 +9,19 @@
         DragOver="Window_DragOver">
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{x:Static ApplicationCommands.Open}"/>
+        <KeyBinding Key="P" Modifiers="Ctrl" Command="{x:Static ApplicationCommands.Print}"/>
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" Executed="OpenFile_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Print" Executed="Print_Executed" CanExecute="Document_CanExecute"/>
     </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem x:Name="FileMenu">
                 <MenuItem x:Name="OpenMenuItem" Command="ApplicationCommands.Open" InputGestureText="Ctrl+O"/>
+                <Separator/>
+                <MenuItem x:Name="PrintMenuItem" Command="ApplicationCommands.Print" InputGestureText="Ctrl+P"/>
+                <MenuItem x:Name="ExportPdfMenuItem" Click="ExportPdf_Click" IsEnabled="False"/>
                 <Separator/>
                 <MenuItem x:Name="ExitMenuItem" Click="Exit_Click"/>
             </MenuItem>

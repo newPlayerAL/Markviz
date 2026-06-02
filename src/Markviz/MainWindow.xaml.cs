@@ -41,6 +41,7 @@ public partial class MainWindow : Window
             userDataFolder: _userDataFolder);
         await WebView.EnsureCoreWebView2Async(env);
         _webViewReady = true;
+        ExportPdfMenuItem.IsEnabled = true;
 
         // When a file is dropped on WebView2, its default behavior is to open
         // the file (typically in a new popup window). Intercept both paths and
@@ -78,6 +79,8 @@ public partial class MainWindow : Window
     {
         FileMenu.Header        = L.MenuFile;
         OpenMenuItem.Header    = L.MenuOpen;
+        PrintMenuItem.Header   = L.MenuPrint;
+        ExportPdfMenuItem.Header = L.MenuExportPdf;
         ExitMenuItem.Header    = L.MenuExit;
         ToolsMenu.Header       = L.MenuTools;
         RegisterMenuItem.Header   = L.MenuRegisterAssoc;
@@ -172,6 +175,24 @@ public partial class MainWindow : Window
                 th { background: #161b22; }
                 a { color: #58a6ff; }
             }
+            /* Print / PDF export: force light theme, use full page width, wrap long code lines.
+               Must come after the dark-scheme block so it wins the cascade when both apply. */
+            @media print {
+                body {
+                    color: #24292f;
+                    background: #ffffff;
+                    max-width: none;
+                    margin: 0;
+                    padding: 0;
+                }
+                h1, h2, hr { border-color: #eaecef; }
+                code, pre { background: #f6f8fa; }
+                pre { overflow-x: visible; white-space: pre-wrap; word-break: break-word; }
+                blockquote { border-color: #dfe2e5; color: #6a737d; }
+                th, td { border-color: #dfe2e5; }
+                th { background: #f6f8fa; }
+                a { color: #0969da; }
+            }
         </style>
         </head>
         <body>{{body}}</body>
@@ -210,6 +231,53 @@ public partial class MainWindow : Window
         if (dlg.ShowDialog() == true)
         {
             LoadFile(dlg.FileName);
+        }
+    }
+
+    private void Document_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+    {
+        e.CanExecute = _webViewReady;
+    }
+
+    private void Print_Executed(object sender, ExecutedRoutedEventArgs e)
+    {
+        // Browser kind = Edge's print preview (printer choice, paper size, scaling).
+        WebView.CoreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser);
+    }
+
+    private async void ExportPdf_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_webViewReady) return;
+
+        var dlg = new SaveFileDialog
+        {
+            Filter = L.PdfFileFilter,
+            FileName = _currentFile != null
+                ? Path.GetFileNameWithoutExtension(_currentFile) + ".pdf"
+                : "Markviz.pdf",
+        };
+        if (_currentFile != null)
+            dlg.InitialDirectory = Path.GetDirectoryName(_currentFile);
+        if (dlg.ShowDialog() != true) return;
+
+        try
+        {
+            var ok = await WebView.CoreWebView2.PrintToPdfAsync(dlg.FileName, null);
+            if (ok)
+            {
+                MessageBox.Show(L.MsgExportPdfDone + dlg.FileName, L.DialogTitleExportPdf,
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(L.MsgExportPdfFail + dlg.FileName, L.DialogTitleError,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(L.MsgExportPdfFail + ex.Message, L.DialogTitleError,
+                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

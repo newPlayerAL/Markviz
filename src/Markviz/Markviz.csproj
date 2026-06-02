@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Markviz</AssemblyName>
     <RootNamespace>Markviz</RootNamespace>
+    <Version>0.2.0</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <!-- Allows restore/build of this WPF project from non-Windows OS (CI, dev containers). -->

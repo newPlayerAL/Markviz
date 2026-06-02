@@ -50,6 +50,8 @@ internal static class L
     // ===== Menus =====
     public static string MenuFile           => Pick("_File", "文件(_F)");
     public static string MenuOpen           => Pick("_Open...", "打开(_O)...");
+    public static string MenuPrint          => Pick("_Print...", "打印(_P)...");
+    public static string MenuExportPdf      => Pick("Export as P_DF...", "导出为 PDF(_D)...");
     public static string MenuExit           => Pick("E_xit", "退出(_X)");
     public static string MenuTools          => Pick("_Tools", "工具(_T)");
     public static string MenuRegisterAssoc  => Pick("Register .md / .markdown file association", "注册 .md / .markdown 文件关联");
@@ -62,6 +64,7 @@ internal static class L
     public static string DialogTitleError       => Pick("Error", "错误");
     public static string DialogTitleAssoc       => Pick("File Association", "文件关联");
     public static string DialogTitleAbout       => Pick("About", "关于");
+    public static string DialogTitleExportPdf   => Pick("Export as PDF", "导出为 PDF");
 
     // ===== Dialog messages =====
     public static string MsgRegistered => Pick(
@@ -74,6 +77,8 @@ internal static class L
     public static string MsgRegisterFail    => Pick("Registration failed: ", "注册失败：");
     public static string MsgUnregisterFail  => Pick("Unregistration failed: ", "取消失败：");
     public static string MsgOpenFail        => Pick("Failed to open file: ", "打开文件失败：");
+    public static string MsgExportPdfDone   => Pick("PDF exported to:\n", "PDF 已导出到：\n");
+    public static string MsgExportPdfFail   => Pick("Failed to export PDF: ", "导出 PDF 失败：");
 
     public static string MsgAbout => Pick(
         "Markviz\n\nA lightweight Windows Markdown viewer\nBuilt with WPF + WebView2 + Markdig",
@@ -83,6 +88,10 @@ internal static class L
     public static string OpenFileFilter => Pick(
         "Markdown files (*.md;*.markdown)|*.md;*.markdown|All files (*.*)|*.*",
         "Markdown 文件 (*.md;*.markdown)|*.md;*.markdown|所有文件 (*.*)|*.*");
+
+    public static string PdfFileFilter => Pick(
+        "PDF files (*.pdf)|*.pdf",
+        "PDF 文件 (*.pdf)|*.pdf");
 
     // ===== File-association registry =====
     public static string ProgIdDescription => Pick("Markdown Document", "Markdown 文档");
